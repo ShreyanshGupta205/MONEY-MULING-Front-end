@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Our Team | AML SecureNet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --neon-blue: #00f0ff;
+            --neon-blue-dark: #0055ff;
+            --neon-green: #00ff66;
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Particles Background */
+        #particles-js { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; pointer-events: none; }
+
+        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+        .text-gradient { color: var(--neon-blue); }
+        .glass { background: var(--glass-bg); backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 12px; }
+
+        /* Navbar */
+        nav { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; z-index: 1000; border-bottom: 1px solid var(--glass-border); background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px); }
+        .logo { font-size: 1.5rem; font-weight: 700; font-family: 'Space Grotesk'; text-decoration: none; color: var(--text-main); }
+        .logo span { color: var(--neon-blue); text-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color: var(--neon-blue); text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); }
+        
+        /* Mobile Nav */
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px; z-index: 1001; }
+        .menu-toggle .bar { width: 25px; height: 3px; background-color: var(--text-main); transition: var(--transition); }
+
+        /* Page Layout */
+        .page-content { flex: 1; padding: 120px 5% 4rem; position: relative; z-index: 2; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .section-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+        /* Mission Statement Box (NEW) */
+        .mission-box { max-width: 900px; margin: 0 auto 5rem; padding: 3rem; text-align: center; position: relative; overflow: hidden; }
+        .mission-box::before { content: '"'; position: absolute; top: 10px; left: 20px; font-size: 8rem; font-family: 'Space Grotesk'; color: rgba(0, 240, 255, 0.1); line-height: 1; }
+        .mission-box h3 { font-size: 1.5rem; color: var(--text-main); font-weight: 400; font-family: 'Inter'; font-style: italic; line-height: 1.8; position: relative; z-index: 1; }
+        .mission-author { color: var(--neon-blue); margin-top: 1.5rem; font-family: 'Space Grotesk'; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; font-size: 0.9rem; }
+
+        /* Team Grid */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 2.5rem; max-width: 1200px; margin: 0 auto 6rem; }
+        .team-card { text-align: center; padding: 3rem 1.5rem; display: flex; flex-direction: column; align-items: center; transition: var(--transition); position: relative; overflow: hidden; }
+        .team-card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1); }
+        
+        /* Floating Badge for Roles */
+        .superpower-badge { position: absolute; top: 15px; right: -30px; background: var(--neon-blue); color: var(--bg-dark); font-size: 0.7rem; font-weight: 700; padding: 5px 30px; transform: rotate(45deg); font-family: 'Space Grotesk'; box-shadow: 0 0 10px var(--neon-blue); }
+
+        .team-img-wrapper { width: 140px; height: 140px; margin: 0 auto 1.5rem; border-radius: 50%; padding: 4px; background: linear-gradient(135deg, var(--neon-blue), var(--neon-blue-dark)); transition: var(--transition); }
+        .team-card:hover .team-img-wrapper { box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); transform: scale(1.05); }
+        .team-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 4px solid var(--bg-dark); }
+        
+        .team-role { color: var(--neon-blue); font-weight: 700; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; margin: 0.5rem 0 1rem; }
+        .team-bio { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 1.5rem; flex-grow: 1; }
+        
+        .team-socials { display: flex; justify-content: center; gap: 1.2rem; }
+        .team-socials a { color: var(--text-muted); transition: var(--transition); }
+        .team-socials a:hover { color: var(--text-main); transform: translateY(-3px) scale(1.1); filter: drop-shadow(0 0 8px var(--neon-blue)); }
+        .team-socials svg { width: 22px; height: 22px; fill: currentColor; }
+
+        /* Hackathon Stats (NEW) */
+        .hackathon-grind { margin-bottom: 5rem; text-align: center; }
+        .hackathon-grind h2 { font-size: 2.5rem; margin-bottom: 3rem; }
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; max-width: 1000px; margin: 0 auto; }
+        .stat-card { padding: 2rem; border-top: 3px solid var(--glass-border); transition: var(--transition); background: linear-gradient(to bottom, rgba(255,255,255,0.02), transparent); border-radius: 8px; }
+        .stat-card:hover { border-top-color: var(--neon-blue); background: linear-gradient(to bottom, rgba(0, 240, 255, 0.05), transparent); }
+        .stat-value { font-size: 3.5rem; font-family: 'Space Grotesk'; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem; }
+        .stat-label { color: var(--neon-blue); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold;}
+
+        /* CTA Section */
+        .cta-section { text-align: center; padding: 4rem; background: rgba(0, 240, 255, 0.02); border: 1px solid var(--glass-border); border-radius: 16px; max-width: 800px; margin: 0 auto 2rem; }
+        .cta-section h2 { font-size: 2rem; margin-bottom: 1rem; }
+        .btn { padding: 0.8rem 1.8rem; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; font-family: 'Space Grotesk'; display: inline-flex; align-items: center; justify-content: center; transition: var(--transition); margin-top: 1.5rem; }
+        .btn-primary { background: linear-gradient(90deg, var(--neon-blue), var(--neon-blue-dark)); color: var(--bg-dark) !important; border: none; box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
+        .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 240, 255, 0.6); }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--glass-border); padding: 3rem 5%; background: rgba(0,0,0,0.6); position: relative; z-index: 2; text-align: center; margin-top: auto; }
+        .footer-bottom { color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem; }
+
+        /* Animations */
+        .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            .nav-links { position: absolute; top: 70px; right: 0; left: 0; background: rgba(18, 18, 20, 0.95); flex-direction: column; align-items: center; padding: 2rem 0; transform: translateY(-150%); transition: transform 0.4s ease; border-bottom: 1px solid var(--glass-border); z-index: 999; }
+            .nav-links.nav-active { transform: translateY(0); }
+            .section-header h1 { font-size: 2.5rem; }
+            .mission-box { padding: 2rem; }
+            .mission-box h3 { font-size: 1.2rem; }
+            .superpower-badge { display: none; } /* Hide on small screens to prevent overflow */
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav>
+        <a href="index.html" class="logo">AML <span>SecureNet</span></a>
+        <button class="menu-toggle" id="mobile-menu" aria-label="Toggle Navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#capabilities">Capabilities</a></li>
+            <li><a href="index.html#tech-stack">Tech Stack</a></li>
+            <li><a href="team.html" class="active">Our Team</a></li>
+        </ul>
+    </nav>
+
+    <main class="page-content">
+        
+        <div class="section-header animate-on-scroll">
+            <h1>Meet <span class="text-gradient">The Innovators</span></h1>
+            <p>Four developers, 48 hours, and one shared goal: to build a scalable, zero-knowledge financial forensics engine.</p>
+        </div>
+
+        <div class="glass mission-box animate-on-scroll">
+            <h3>"We noticed that traditional AML software relies on outdated SQL tables, exposing massive data leaks and missing cyclical fraud. We built SecureNet to process everything locally in the browser using graph algorithms, ensuring complete privacy and unmatched detection speed."</h3>
+            <div class="mission-author">— The Team Vision</div>
+        </div>
+
+        <div class="team-grid">
+            
+            <div class="glass team-card animate-on-scroll">
+                <div class="superpower-badge">Graph DB</div>
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name One</h3>
+                <div class="team-role">Lead AI Engineer</div>
+                <p class="team-bio">Built the core graph-traversal algorithms to detect money muling cycles in under 50ms.</p>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+            
+            <div class="glass team-card animate-on-scroll" style="transition-delay: 0.1s;">
+                <div class="superpower-badge">WebGL</div>
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name Two</h3>
+                <div class="team-role">Frontend UI/UX</div>
+                <p class="team-bio">Designed the glassmorphism aesthetic and rendered the 3D data visualizations in the dashboard.</p>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+
+            <div class="glass team-card animate-on-scroll" style="transition-delay: 0.2s;">
+                <div class="superpower-badge">WASM</div>
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name Three</h3>
+                <div class="team-role">Backend Architect</div>
+                <p class="team-bio">Engineered the WebAssembly pipeline that allows the system to process massive CSVs securely offline.</p>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+
+            <div class="glass team-card animate-on-scroll" style="transition-delay: 0.3s;">
+                <div class="superpower-badge">Data</div>
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name Four</h3>
+                <div class="team-role">Data Scientist</div>
+                <p class="team-bio">Developed the predictive false-positive scoring system to ensure accuracy in threat detection.</p>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="hackathon-grind animate-on-scroll">
+            <h2>The <span class="text-gradient">48-Hour Grind</span></h2>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value counter" data-target="152">0</div>
+                    <div class="stat-label">Commits Pushed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value counter" data-target="36">0</div>
+                    <div class="stat-label">Cups of Coffee</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value counter" data-target="4">0</div>
+                    <div class="stat-label">Hours of Sleep</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value counter" data-target="8500">0</div>
+                    <div class="stat-label">Lines of Code</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="cta-section animate-on-scroll glass">
+            <h2>Evaluate Our Code</h2>
+            <p style="color: var(--text-muted);">Want to see how we built the graph engine? Check out our public repository containing the full architecture, WebAssembly setup, and documentation.</p>
+            <a href="https://github.com/your-repo-link" class="btn btn-primary" target="_blank">View GitHub Repository</a>
+        </div>
+
+    </main>
+
+    <footer>
+        <div class="logo" style="margin-bottom: 0.5rem;">AML <span>SecureNet</span></div>
+        <div class="footer-bottom">
+            &copy; 2026 AML SecureNet. Built during the Hackathon.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+        
+        mobileMenu.addEventListener('click', () => { navLinks.classList.toggle('nav-active'); });
+        navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('nav-active'); }); });
+
+        // Interactive Background
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 70, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00f0ff" }, 
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.3, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#0055ff", "opacity": 0.3, "width": 1.5 },
+                "move": { "enable": true, "speed": 1, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "window",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.8 } }, "push": { "particles_nb": 3 } }
+            },
+            "retina_detect": true
+        });
+
+        // Scroll Observer and Number Counter
+        let countersRun = false;
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    
+                    // Trigger numbers when Grind section is visible
+                    if(entry.target.classList.contains('hackathon-grind') && !countersRun) {
+                        countersRun = true;
+                        const counters = document.querySelectorAll('.counter');
+                        const speed = 100;
+                        counters.forEach(counter => {
+                            const updateCount = () => {
+                                const target = +counter.getAttribute('data-target');
+                                const count = +counter.innerText;
+                                const inc = target / speed;
+                                if (count < target) {
+                                    counter.innerText = Math.ceil(count + inc);
+                                    setTimeout(updateCount, 20);
+                                } else {
+                                    counter.innerText = target + (target > 1000 ? '+' : '');
+                                }
+                            };
+                            updateCount();
+                        });
+                    }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => { observer.observe(el); });
+    </script>
+</body>
+</html>

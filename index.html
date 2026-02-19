@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AML SecureNet | Hackathon Submission</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --neon-blue: #00f0ff;
+            --neon-blue-dark: #0055ff;
+            --neon-green: #00ff66;
+            --neon-red: #ff3366;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 255, 102, 0.05), transparent 25%);
+        }
+
+        a:focus-visible, button:focus-visible, .btn:focus-visible { outline: 2px solid var(--neon-blue); outline-offset: 4px; }
+
+        /* Particles Background */
+        #particles-js { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; pointer-events: none; }
+
+        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+
+        .glass { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 12px; }
+
+        /* Navbar */
+        nav { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; z-index: 1000; border-bottom: 1px solid var(--glass-border); background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px); }
+        .logo { font-size: 1.5rem; font-weight: 700; font-family: 'Space Grotesk'; }
+        .logo span { color: var(--neon-blue); text-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: var(--transition); }
+        .nav-links a:hover { color: var(--neon-blue); text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); }
+        
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px; z-index: 1001; }
+        .menu-toggle .bar { width: 25px; height: 3px; background-color: var(--text-main); transition: var(--transition); }
+
+        /* Buttons */
+        .btn { padding: 0.75rem 1.5rem; border-radius: 8px; font-weight: 600; text-decoration: none; cursor: pointer; font-family: 'Space Grotesk'; display: inline-flex; align-items: center; justify-content: center; transition: var(--transition); }
+        .btn-primary { background: linear-gradient(90deg, var(--neon-blue), var(--neon-blue-dark)); color: var(--bg-dark) !important; border: none; box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); }
+        .btn-primary:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 15px 30px rgba(0, 240, 255, 0.6); }
+        .btn-secondary { background: rgba(255, 255, 255, 0.05); color: var(--text-main); border: 1px solid rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px); }
+        .btn-secondary:hover { background: var(--text-main); color: var(--bg-dark) !important; transform: translateY(-4px); box-shadow: 0 10px 25px rgba(255, 255, 255, 0.2); }
+
+        /* Hero */
+        .hero { min-height: 100vh; display: flex; align-items: center; justify-content: space-between; padding: 120px 5% 60px; position: relative; z-index: 2; gap: 4rem; }
+        .hero-text { flex: 1; text-align: left; }
+        .hero-visual { flex: 1; position: relative; display: flex; justify-content: center; }
+        .badge { display: inline-block; padding: 0.5rem 1.2rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; color: var(--neon-green); background: rgba(0, 255, 102, 0.1); border: 1px solid rgba(0, 255, 102, 0.3); margin-bottom: 2rem; animation: pulse-border 2s infinite; }
+        .hackathon-tag { color: var(--neon-blue); font-family: 'Space Grotesk'; font-size: 0.9rem; letter-spacing: 2px; text-transform: uppercase; margin-bottom: 1rem; display: block; }
+        .hero h1 { font-size: 4.5rem; margin-bottom: 1.5rem; line-height: 1.1; }
+        .text-gradient { color: var(--neon-blue); }
+        .hero p { max-width: 600px; font-size: 1.2rem; color: var(--text-muted); margin-bottom: 2.5rem; }
+        .hero-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+        /* Hero Images */
+        .hero-image-container { position: relative; border-radius: 24px; overflow: hidden; box-shadow: 0 25px 50px -12px rgba(0, 240, 255, 0.25); border: 1px solid var(--glass-border); transform: perspective(1000px) rotateY(-5deg) rotateX(5deg); transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1); max-width: 100%; }
+        .hero-image-container:hover { transform: perspective(1000px) rotateY(0deg) rotateX(0deg); }
+        .hero-image-container img { width: 100%; height: auto; display: block; opacity: 0.9;}
+        .floating-ui-card { position: absolute; background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 12px; padding: 12px 20px; color: white; font-size: 0.85rem; font-weight: 600; z-index: 10; box-shadow: 0 15px 35px rgba(0,0,0,0.5); display: flex; align-items: center; }
+        .ui-card-1 { top: 10%; left: -10%; animation: float-card 5s ease-in-out infinite; }
+        .ui-card-2 { bottom: 10%; right: -10%; animation: float-card 6s ease-in-out infinite 1.5s; border-color: var(--neon-red);}
+        .pulse-dot { display: inline-block; width: 10px; height: 10px; background: var(--neon-green); border-radius: 50%; margin-right: 10px; box-shadow: 0 0 10px var(--neon-green); animation: pulse-dot-anim 2s infinite; }
+        .pulse-dot.red { background: var(--neon-red); box-shadow: 0 0 10px var(--neon-red); animation-duration: 1s;}
+
+        @keyframes float-card { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes pulse-dot-anim { 0% { opacity: 1; transform: scale(1); } 50% { opacity: 0.4; transform: scale(1.3); } 100% { opacity: 1; transform: scale(1); } }
+        @keyframes pulse-border { 0% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0.4); } 70% { box-shadow: 0 0 0 10px rgba(0, 255, 102, 0); } 100% { box-shadow: 0 0 0 0 rgba(0, 255, 102, 0); } }
+
+        /* General Sections */
+        section { padding: 8rem 5%; position: relative; z-index: 2;}
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .section-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; }
+
+        /* Stats */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+        .stat-card { padding: 2rem; text-align: center; transition: var(--transition); }
+        .stat-card:hover { transform: translateY(-10px); border-color: rgba(0, 240, 255, 0.3); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.05); }
+        .stat-value { font-size: 3.5rem; font-family: 'Space Grotesk'; font-weight: 700; color: var(--neon-blue); margin-bottom: 0.5rem; text-shadow: 0 0 20px rgba(0,240,255,0.3); }
+        .stat-label { color: var(--text-muted); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; font-weight: bold;}
+
+        /* Capabilities Grid */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .card { padding: 2.5rem; transition: transform 0.4s ease, box-shadow 0.4s ease; border: 1px solid var(--glass-border);}
+        .card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0, 240, 255, 0.1); border-color: rgba(0, 240, 255, 0.4); }
+        .card h3 { margin-bottom: 1rem; font-size: 1.3rem; color: var(--neon-blue); }
+        .card p { color: var(--text-muted); font-size: 0.95rem; }
+
+        /* Split Sections */
+        .split-section { display: flex; align-items: center; gap: 4rem; }
+        .split-content { flex: 1; }
+        .split-content h2 { font-size: 2.5rem; margin-bottom: 1rem; }
+        .split-content h3 { color: var(--neon-blue); font-size: 1.8rem; margin-bottom: 0.5rem; }
+        .split-content ul { list-style: none; margin-top: 1.5rem; }
+        .split-content li { margin-bottom: 1rem; padding-left: 1.5rem; position: relative; color: var(--text-muted); }
+        .split-content li::before { content: '▹'; color: var(--neon-green); position: absolute; left: 0; font-size: 1.2rem; top: -2px;}
+        .split-visual { flex: 1; background: var(--glass-bg); border-radius: 12px; min-height: 300px; display: flex; align-items: center; justify-content: center; border: 1px solid var(--glass-border); box-shadow: 0 10px 30px rgba(0,0,0,0.5); overflow: hidden;}
+        .split-visual img { width: 100%; height: 100%; object-fit: cover; opacity: 0.7;}
+
+        /* Tech Stack Section (Hackathon) */
+        .tech-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 1.5rem; max-width: 900px; margin: 0 auto; }
+        .tech-item { background: var(--glass-bg); border: 1px solid var(--glass-border); padding: 1rem 2rem; border-radius: 30px; font-family: 'Space Grotesk'; font-weight: 600; color: var(--text-main); transition: var(--transition); display: flex; align-items: center; gap: 10px; }
+        .tech-item:hover { border-color: var(--neon-blue); box-shadow: 0 0 15px rgba(0, 240, 255, 0.2); transform: translateY(-3px); color: var(--neon-blue); }
+
+        /* Team Section */
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 2rem; }
+        .team-card { text-align: center; padding: 2.5rem 1.5rem; display: flex; flex-direction: column; align-items: center; border: 1px solid var(--glass-border); transition: var(--transition); border-radius: 12px; }
+        .team-card:hover { transform: translateY(-10px); border-color: var(--neon-blue); box-shadow: 0 10px 30px rgba(0, 240, 255, 0.1); }
+        .team-img-wrapper { width: 120px; height: 120px; margin: 0 auto 1.5rem; border-radius: 50%; padding: 3px; background: linear-gradient(135deg, var(--neon-blue), var(--neon-blue-dark)); transition: var(--transition); }
+        .team-card:hover .team-img-wrapper { box-shadow: 0 0 20px rgba(0, 240, 255, 0.4); transform: scale(1.05); }
+        .team-img-wrapper img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; border: 3px solid var(--bg-dark); }
+        .team-role { color: var(--neon-blue); font-weight: 700; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; margin: 0.5rem 0; }
+        .team-socials { display: flex; justify-content: center; gap: 1rem; margin-top: 1rem; }
+        .team-socials a { color: var(--text-muted); transition: var(--transition); }
+        .team-socials a:hover { color: var(--text-main); transform: translateY(-3px); filter: drop-shadow(0 0 8px var(--neon-blue)); }
+        .team-socials svg { width: 20px; height: 20px; fill: currentColor; }
+
+        /* FAQ */
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { padding: 0 1.5rem; margin-bottom: 1rem; border-radius: 8px; overflow: hidden; transition: var(--transition); }
+        .faq-question { width: 100%; text-align: left; background: none; border: none; color: var(--text-main); font-size: 1.1rem; font-family: 'Space Grotesk'; cursor: pointer; display: flex; justify-content: space-between; padding: 1.2rem 0; outline: none;}
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; color: var(--text-muted); }
+        .faq-answer p { padding-bottom: 1.2rem; }
+        .faq-item.active { border-color: rgba(0, 240, 255, 0.3); box-shadow: 0 5px 20px rgba(0, 240, 255, 0.05);}
+        .faq-item.active .faq-answer { max-height: 200px; }
+        .faq-item.active .faq-question { color: var(--neon-blue); }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--glass-border); padding: 4rem 5% 2rem; background: rgba(0,0,0,0.6); position: relative; z-index: 2; text-align: center;}
+        .footer-bottom { color: var(--text-muted); font-size: 0.9rem; margin-top: 2rem; }
+
+        /* Animations */
+        .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 991px) {
+            .hero { flex-direction: column; text-align: center; padding-top: 150px; gap: 3rem;}
+            .hero-text { align-items: center; display: flex; flex-direction: column; }
+            .hero h1 { font-size: 3.5rem; }
+            .hero-buttons { justify-content: center; }
+            .floating-ui-card { display: none; }
+            .split-section { flex-direction: column; }
+            .team-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            .nav-links { position: absolute; top: 70px; right: 0; left: 0; background: rgba(18, 18, 20, 0.95); flex-direction: column; align-items: center; padding: 2rem 0; transform: translateY(-150%); transition: transform 0.4s ease; border-bottom: 1px solid var(--glass-border); z-index: 999; }
+            .nav-links.nav-active { transform: translateY(0); }
+            .hero h1 { font-size: 2.8rem; }
+            .hero-buttons { flex-direction: column; width: 100%; }
+            .hero-buttons .btn { width: 100%; }
+            .team-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav>
+        <div class="logo">AML <span>SecureNet</span></div>
+        <button class="menu-toggle" id="mobile-menu" aria-label="Toggle Navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <li><a href="#overview">Overview</a></li>
+            <li><a href="#capabilities">Capabilities</a></li>
+            <li><a href="#tech-stack">Tech Stack</a></li>
+            <li><a href="#team">Our Team</a></li> </ul>
+    </nav>
+
+    <section class="hero" id="overview">
+        <div class="hero-text animate-on-scroll">
+            <span class="hackathon-tag">🚀 Official Hackathon Submission</span>
+            <div class="badge">Client-Side Processing v2.0 Active</div>
+            <h1>Detect Complex Financial<br><span class="text-gradient">Fraud Instantly</span></h1>
+            <p>AI-powered graph algorithms that uncover hidden money-laundering patterns, detect suspicious transaction networks, and protect sensitive financial data with zero server exposure.</p>
+            <div class="hero-buttons">
+                <a href="https://moneymuling-eight.vercel.app/" class="btn btn-primary" target="_blank">Start Investigation App</a>
+                <a href="#github-repo" class="btn btn-secondary">View Source Code</a>
+            </div>
+        </div>
+        
+        <div class="hero-visual animate-on-scroll" style="transition-delay: 0.2s;">
+            <div class="floating-ui-card ui-card-1">
+                <span class="pulse-dot"></span> Graph Engine: Active
+            </div>
+            <div class="floating-ui-card ui-card-2">
+                <span class="pulse-dot red"></span> Threat Ring Detected
+            </div>
+            <div class="hero-image-container">
+                <img src="https://images.unsplash.com/photo-1639322537228-f710d846310a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1000&q=80" alt="AML Graph Network Visualization">
+            </div>
+        </div>
+    </section>
+
+    <section id="stats-section" class="animate-on-scroll">
+        <div class="stats-grid">
+            <div class="stat-card glass">
+                <div class="stat-value" data-target="10000">0</div>
+                <div class="stat-label">Nodes Processed/Sec</div>
+            </div>
+            <div class="stat-card glass">
+                <div class="stat-value" data-target="99.8">0</div>
+                <div class="stat-label">Pattern Accuracy %</div>
+            </div>
+            <div class="stat-card glass">
+                <div class="stat-value" data-target="50">0</div>
+                <div class="stat-label">Server Latency (ms)</div>
+            </div>
+            <div class="stat-card glass">
+                <div class="stat-value" data-target="100">0</div>
+                <div class="stat-label">Data Privacy %</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="animate-on-scroll">
+        <div class="split-section">
+            <div class="split-content">
+                <h2><span class="text-gradient">The Challenge</span></h2>
+                <p>Built specifically to solve the complex financial forensics problem statement. Traditional rule-based AML systems are fundamentally flawed as they analyze transactions in isolation.</p>
+                <ul>
+                    <li>Overwhelming high false positive rates.</li>
+                    <li>Inability to detect cross-border network fraud.</li>
+                    <li>Failure to spot deep cyclical laundering.</li>
+                </ul>
+                <br>
+                <h3>Our Graph-Based Solution</h3>
+                <p>SecureNet maps transaction relationships as multi-dimensional graphs, easily uncovering hidden laundering structures (smurfing, circular routing) that traditional SQL engines miss entirely.</p>
+            </div>
+            <div class="split-visual">
+                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Data Analytics Visualization" loading="lazy">
+            </div>
+        </div>
+    </section>
+
+    <section id="tech-stack" class="animate-on-scroll">
+        <div class="section-header">
+            <h2>Built With <span class="text-gradient">Modern Tools</span></h2>
+            <p>We leveraged a cutting-edge stack to ensure lightning-fast graph processing directly in the browser.</p>
+        </div>
+        <div class="tech-grid">
+            <div class="tech-item">⚛️ React.js</div>
+            <div class="tech-item">🕸️ WebAssembly</div>
+            <div class="tech-item">🐍 Python FastAPI</div>
+            <div class="tech-item">📊 Neo4j Graph DB</div>
+            <div class="tech-item">🧠 TensorFlow</div>
+            <div class="tech-item">🎨 Tailwind CSS</div>
+        </div>
+    </section>
+
+    <section id="capabilities" class="animate-on-scroll">
+        <div class="section-header">
+            <h2>Detection Capabilities</h2>
+        </div>
+        <div class="grid-3">
+            <div class="card glass">
+                <h3>🔄 Circular Fund Routing</h3>
+                <p>Automatically detects looping transaction patterns across multiple dummy accounts used to obscure the original fund origin.</p>
+            </div>
+            <div class="card glass">
+                <h3>🔪 Smurfing & Structuring</h3>
+                <p>Identifies automated transaction splitting and micro-deposits spread across accounts designed to evade regulatory thresholds.</p>
+            </div>
+            <div class="card glass">
+                <h3>🕸 Layered Shell Networks</h3>
+                <p>Uncovers deep multi-entity laundering structures and beneficial ownership obscured across different jurisdictions.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- <section id="team" class="animate-on-scroll">
+        <div class="section-header">
+            <h2>Meet <span class="text-gradient">The Team</span></h2>
+            <p>The architects behind AML SecureNet. We built this entirely from scratch during the hackathon.</p>
+        </div>
+        <div class="team-grid">
+            
+            <div class="glass team-card">
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1568602471122-7832951cc4c5?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name One</h3>
+                <div class="team-role">Graph AI Engineer</div>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+            
+            <div class="glass team-card">
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name Two</h3>
+                <div class="team-role">Frontend UI/UX</div>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+
+            <div class="glass team-card">
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name Three</h3>
+                <div class="team-role">Backend DB Architect</div>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+
+            <div class="glass team-card">
+                <div class="team-img-wrapper"><img src="https://images.unsplash.com/photo-1580489944761-15a19d654956?ixlib=rb-4.0.3&auto=format&fit=crop&w=300&q=80" alt="Team Member"></div>
+                <h3>Name Four</h3>
+                <div class="team-role">Data Scientist</div>
+                <div class="team-socials">
+                    <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg></a>
+                    <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg></a>
+                </div>
+            </div>
+
+        </div>
+    </section> -->
+
+    <section id="faq" class="animate-on-scroll">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item glass">
+                <button class="faq-question" aria-expanded="false">How secure is the data processing? <span aria-hidden="true">+</span></button>
+                <div class="faq-answer">
+                    <p>AML SecureNet uses a local WebAssembly engine. When you upload a CSV, it is parsed and mapped entirely within your browser's memory. No transaction data is ever sent to our servers.</p>
+                </div>
+            </div>
+            <div class="faq-item glass">
+                <button class="faq-question" aria-expanded="false">What is the maximum supported file size? <span aria-hidden="true">+</span></button>
+                <div class="faq-answer">
+                    <p>The client-side engine can comfortably process files up to 2GB (approx. 10 million transactions) depending on the available RAM on your local workstation.</p>
+                </div>
+            </div>
+            <div class="faq-item glass">
+                <button class="faq-question" aria-expanded="false">How are false positives handled? <span aria-hidden="true">+</span></button>
+                <div class="faq-answer">
+                    <p>Instead of rigid rules, we use graph-clustering algorithms that score the "neighborhood" of a transaction. A node only triggers an alert if its surrounding network structure matches known laundering topologies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="logo" style="margin-bottom: 1rem;">AML <span>SecureNet</span></div>
+        <div class="footer-bottom">
+            &copy; 2026 AML SecureNet. Built during the Hackathon.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+        
+        mobileMenu.addEventListener('click', () => { navLinks.classList.toggle('nav-active'); });
+        navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('nav-active'); }); });
+
+        // Interactive Background
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 120, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00f0ff" }, 
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.4, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#0055ff", "opacity": 0.4, "width": 1.5 },
+                "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "window",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 250, "line_linked": { "opacity": 1 } }, "push": { "particles_nb": 4 } }
+            },
+            "retina_detect": true
+        });
+
+        // Scroll Observer
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    if(entry.target.id === 'stats-section') { runCounters(); }
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => { observer.observe(el); });
+
+        // Number Counter
+        let countersRun = false;
+        function runCounters() {
+            if(countersRun) return;
+            countersRun = true;
+            const counters = document.querySelectorAll('.stat-value');
+            const speed = 150;
+            counters.forEach(counter => {
+                const updateCount = () => {
+                    const target = +counter.getAttribute('data-target');
+                    const count = +counter.innerText.replace('K+', '');
+                    const inc = target / speed;
+                    if (count < target) {
+                        let newValue = Math.ceil(count + inc);
+                        if(target === 99.8) newValue = (count + inc).toFixed(1);
+                        counter.innerText = newValue;
+                        setTimeout(updateCount, 15);
+                    } else {
+                        counter.innerText = target + (target === 10000 ? 'K+' : target === 99.8 ? '%' : '');
+                    }
+                };
+                updateCount();
+            });
+        }
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                    const btn = item.querySelector('.faq-question');
+                    btn.setAttribute('aria-expanded', 'false');
+                    btn.querySelector('span').innerText = '+';
+                });
+
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                    button.setAttribute('aria-expanded', 'true');
+                    button.querySelector('span').innerText = '-';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

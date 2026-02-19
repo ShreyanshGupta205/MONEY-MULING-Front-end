@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RIFT 2026 Hackathon | Build the Future</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-base: #05050A;
+            --bg-surface: #0f1016;
+            --primary-cyan: #00f0ff;
+            --primary-purple: #9d4edd;
+            --accent-pink: #ff007f;
+            --text-main: #f8f9fa;
+            --text-muted: #a0aab2;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --danger: #ff3366;
+            --success: #00ff66;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-base);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Particles Background */
+        #particles-js {
+            position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; pointer-events: none;
+            background: radial-gradient(circle at 15% 50%, rgba(157, 78, 221, 0.08), transparent 30%),
+                        radial-gradient(circle at 85% 30%, rgba(0, 240, 255, 0.08), transparent 30%);
+        }
+
+        h1, h2, h3, h4, .logo { font-family: 'Space Grotesk', sans-serif; }
+
+        .text-gradient {
+            background: linear-gradient(135deg, var(--primary-cyan), var(--primary-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            padding: 2.5rem;
+            transition: var(--transition);
+        }
+        .glass-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(0, 240, 255, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.05);
+        }
+
+        /* --- Navigation --- */
+        nav {
+            position: fixed; top: 0; width: 100%;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 1.5rem 5%; z-index: 1000;
+            background: rgba(5, 5, 10, 0.8);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-size: 1.8rem; font-weight: 900; letter-spacing: 2px; }
+        .logo span { color: var(--primary-cyan); }
+        .nav-links { display: flex; gap: 2.5rem; list-style: none; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-weight: 500; font-size: 0.95rem; transition: var(--transition); }
+        .nav-links a:hover { color: var(--primary-cyan); text-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+
+        /* --- Buttons --- */
+        .btn {
+            padding: 1rem 2rem; border-radius: 8px; font-weight: 700; font-family: 'Space Grotesk';
+            text-transform: uppercase; letter-spacing: 1px; text-decoration: none; cursor: pointer;
+            display: inline-flex; align-items: center; justify-content: center; transition: var(--transition);
+        }
+        .btn-primary {
+            background: linear-gradient(90deg, var(--primary-purple), var(--primary-cyan));
+            color: #fff; border: none; box-shadow: 0 0 20px rgba(157, 78, 221, 0.4);
+        }
+        .btn-primary:hover { transform: scale(1.05); box-shadow: 0 0 30px rgba(0, 240, 255, 0.6); }
+        .btn-outline {
+            background: transparent; color: var(--text-main);
+            border: 2px solid var(--primary-cyan);
+        }
+        .btn-outline:hover { background: rgba(0, 240, 255, 0.1); transform: scale(1.05); }
+
+        /* --- Hero Section --- */
+        .hero {
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center;
+            align-items: center; text-align: center; padding: 120px 5% 50px; position: relative; z-index: 2;
+        }
+        .hero h1 { font-size: 5.5rem; line-height: 1.1; margin-bottom: 1.5rem; text-transform: uppercase; }
+        .hero p { font-size: 1.3rem; color: var(--text-muted); max-width: 700px; margin-bottom: 3rem; }
+        
+        /* Countdown Timer */
+        .countdown { display: flex; gap: 2rem; margin-bottom: 3rem; }
+        .time-box { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: 12px; padding: 1.5rem; min-width: 120px; }
+        .time-box span { display: block; font-size: 3rem; font-weight: 900; font-family: 'Space Grotesk'; color: var(--primary-cyan); text-shadow: 0 0 15px rgba(0,240,255,0.4); }
+        .time-box label { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 2px; color: var(--text-muted); }
+        
+        .hero-btns { display: flex; gap: 1.5rem; }
+
+        /* --- Sections General --- */
+        section { padding: 8rem 5%; position: relative; z-index: 2; }
+        .section-header { text-align: center; margin-bottom: 5rem; }
+        .section-header h2 { font-size: 3rem; margin-bottom: 1rem; }
+        .section-header p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+
+        /* --- Tracks (Problem Statements) --- */
+        .tracks-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 2.5rem; }
+        .track-badge {
+            display: inline-block; padding: 0.4rem 1rem; border-radius: 20px; font-size: 0.8rem;
+            font-weight: 700; margin-bottom: 1.5rem; letter-spacing: 1px;
+        }
+        .badge-health { background: rgba(0, 255, 102, 0.1); color: var(--success); border: 1px solid rgba(0, 255, 102, 0.3); }
+        .badge-cyber { background: rgba(0, 240, 255, 0.1); color: var(--primary-cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+        .badge-ai { background: rgba(157, 78, 221, 0.1); color: var(--primary-purple); border: 1px solid rgba(157, 78, 221, 0.3); }
+        .badge-web3 { background: rgba(255, 0, 127, 0.1); color: var(--accent-pink); border: 1px solid rgba(255, 0, 127, 0.3); }
+        
+        .glass-card h3 { font-size: 1.8rem; margin-bottom: 1rem; }
+        .glass-card h4 { color: var(--primary-cyan); font-size: 1.1rem; margin: 1.5rem 0 0.5rem; }
+        .glass-card p { color: var(--text-muted); font-size: 0.95rem; }
+        .glass-card ul { margin-top: 1rem; list-style: none; }
+        .glass-card li { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 0.5rem; padding-left: 1.5rem; position: relative; }
+        .glass-card li::before { content: '▹'; color: var(--primary-cyan); position: absolute; left: 0; font-size: 1.2rem; top: -2px; }
+
+        /* --- Mandatory Rules (Warning Box) --- */
+        .rules-box {
+            background: rgba(255, 51, 102, 0.05); border: 1px solid rgba(255, 51, 102, 0.3);
+            border-radius: 16px; padding: 4rem; text-align: center; position: relative; overflow: hidden;
+        }
+        .rules-box::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--danger); box-shadow: 0 0 15px var(--danger);
+        }
+        .rules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 3rem; text-align: left; }
+        .rule-item h4 { color: var(--text-main); font-size: 1.2rem; margin-bottom: 0.5rem; display: flex; align-items: center; gap: 10px; }
+        .rule-item p { color: var(--text-muted); font-size: 0.9rem; }
+
+        /* --- Timeline --- */
+        .timeline-container { max-width: 800px; margin: 0 auto; border-left: 2px solid var(--glass-border); padding-left: 3rem; position: relative; }
+        .timeline-item { margin-bottom: 4rem; position: relative; }
+        .timeline-item::before {
+            content: ''; position: absolute; left: -3.5rem; top: 0; width: 16px; height: 16px;
+            background: var(--bg-base); border: 2px solid var(--primary-cyan); border-radius: 50%;
+            box-shadow: 0 0 10px var(--primary-cyan);
+        }
+        .timeline-date { color: var(--primary-cyan); font-family: 'Space Grotesk'; font-weight: 700; margin-bottom: 0.5rem; letter-spacing: 1px; }
+        .timeline-content h3 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+        .timeline-content p { color: var(--text-muted); }
+
+        /* --- Prizes & Perks --- */
+        .prizes-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+        .prize-card { text-align: center; padding: 4rem 2rem; border-top: 4px solid; }
+        .prize-card.grand { border-color: #FFD700; transform: scale(1.05); background: rgba(255, 215, 0, 0.05); }
+        .prize-card.tracks { border-color: var(--primary-cyan); }
+        .prize-card.perks { border-color: var(--primary-purple); }
+        .prize-amount { font-size: 4rem; font-family: 'Space Grotesk'; font-weight: 900; margin: 1rem 0; text-shadow: 0 0 20px rgba(255,255,255,0.2); }
+
+        /* --- FAQ --- */
+        .faq-container { max-width: 800px; margin: 0 auto; }
+        .faq-item { margin-bottom: 1rem; border-bottom: 1px solid var(--glass-border); }
+        .faq-question {
+            width: 100%; text-align: left; background: none; border: none; color: var(--text-main);
+            font-size: 1.2rem; font-family: 'Space Grotesk'; padding: 1.5rem 0; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .faq-answer { max-height: 0; overflow: hidden; transition: max-height 0.4s ease; color: var(--text-muted); }
+        .faq-answer p { padding-bottom: 1.5rem; }
+        .faq-item.active .faq-question { color: var(--primary-cyan); }
+        .faq-item.active .faq-answer { max-height: 200px; }
+
+        /* --- Footer --- */
+        footer { border-top: 1px solid var(--glass-border); padding: 4rem 5% 2rem; text-align: center; position: relative; z-index: 2; background: rgba(0,0,0,0.5); }
+        .footer-cta { margin-bottom: 4rem; }
+        .footer-cta h2 { font-size: 2.5rem; margin-bottom: 1.5rem; }
+        .footer-bottom { color: var(--text-muted); font-size: 0.9rem; padding-top: 2rem; border-top: 1px solid var(--glass-border); }
+
+        /* --- Animations --- */
+        .animate-on-scroll { opacity: 0; transform: translateY(40px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+        /* --- Responsive --- */
+        @media (max-width: 991px) {
+            .hero h1 { font-size: 4rem; }
+            .countdown { flex-wrap: wrap; justify-content: center; }
+            .prizes-grid { grid-template-columns: 1fr; }
+            .prize-card.grand { transform: scale(1); }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .hero h1 { font-size: 3rem; }
+            .hero-btns { flex-direction: column; width: 100%; }
+            .tracks-grid { grid-template-columns: 1fr; }
+            .time-box { min-width: 100px; padding: 1rem; }
+            .time-box span { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav>
+        <div class="logo">RIFT<span>2026</span></div>
+        <ul class="nav-links">
+            <li><a href="#about">About</a></li>
+            <li><a href="#tracks">The Tracks</a></li>
+            <li><a href="#rules">Rules</a></li>
+            <li><a href="#timeline">Timeline</a></li>
+            <li><a href="#prizes">Prizes</a></li>
+        </ul>
+    </nav>
+
+    <header class="hero">
+        <div class="animate-on-scroll">
+            <h1>Build the <span class="text-gradient">Future</span></h1>
+            <p>48 Hours. 4 Enterprise Challenges. 1 Global Stage. Join the world's most elite developers to build solutions that will redefine HealthTech, Web3, AI, and Cybersecurity.</p>
+            
+            <div class="countdown" id="countdown">
+                <div class="time-box"><span id="days">00</span><label>Days</label></div>
+                <div class="time-box"><span id="hours">00</span><label>Hours</label></div>
+                <div class="time-box"><span id="minutes">00</span><label>Minutes</label></div>
+                <div class="time-box"><span id="seconds">00</span><label>Seconds</label></div>
+            </div>
+
+            <div class="hero-btns">
+                <a href="#" class="btn btn-primary">Launch Hackathon Project</a>
+                <a href="#tracks" class="btn btn-outline">View Event Details</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="about" class="animate-on-scroll">
+        <div class="section-header">
+            <h2>Welcome to RIFT</h2>
+            <p>We aren't looking for standard CRUD apps. RIFT 2026 is designed to push the boundaries of what's possible over a weekend. Tackle real-world problem statements provided by industry leaders and compete for massive equity-free grants.</p>
+        </div>
+    </section>
+
+    <section id="tracks">
+        <div class="section-header animate-on-scroll">
+            <h2>Official <span class="text-gradient">Problem Statements</span></h2>
+            <p>Choose your battlefield. You must select one of these four exact tracks to be eligible for judging.</p>
+        </div>
+        
+        <div class="tracks-grid">
+            <div class="glass-card animate-on-scroll">
+                <div class="track-badge badge-health">HealthTech Track</div>
+                <h3>PharmaGuard</h3>
+                <p>Build an AI-powered web app that analyzes patient genetic data and drug names to predict personalized pharmacogenomic risks.</p>
+                <h4>Key Requirements:</h4>
+                <ul>
+                    <li>Parse authentic <code>VCF v4.2</code> files.</li>
+                    <li>Predict drug-specific risks across 6 critical genes (incl. CYP2D6 and TPMT).</li>
+                    <li>Generate LLM-powered clinical explanations.</li>
+                    <li>Strict output formatting in a defined JSON schema.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card animate-on-scroll">
+                <div class="track-badge badge-cyber">Graph Theory Track</div>
+                <h3>Money Muling Detection</h3>
+                <p>Build a web-based Financial Forensics Engine that processes transaction data to expose hidden money muling networks.</p>
+                <h4>Key Requirements:</h4>
+                <ul>
+                    <li>Accept CSV file uploads of transaction logs.</li>
+                    <li>Provide interactive directed-graph visualizations.</li>
+                    <li>Detect structural patterns: circular routing (cycles) & smurfing.</li>
+                    <li>Flag layered shell networks and suspicious nodes.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card animate-on-scroll">
+                <div class="track-badge badge-ai">AI / DevOps Track</div>
+                <h3>Autonomous Healing Agent</h3>
+                <p>Build an Autonomous DevOps Agent with a publicly deployed React Dashboard that detects, fixes, and verifies code pipeline issues.</p>
+                <h4>Key Requirements:</h4>
+                <ul>
+                    <li>Accept a target GitHub URL as input.</li>
+                    <li>Automatically run tests and fix syntax/logic errors.</li>
+                    <li>Commit fixes strictly to a new branch named <code>TEAM_NAME_LEADER_NAME_AI_Fix</code>.</li>
+                    <li>Must use the specific <code>[AI-AGENT]</code> commit prefix.</li>
+                </ul>
+            </div>
+
+            <div class="glass-card animate-on-scroll">
+                <div class="track-badge badge-web3">Web3 Track</div>
+                <h3>Build on Algorand</h3>
+                <p>An open innovation challenge to build a real-world application (DeFi, NFTs, or DAO governance) meaningfully leveraging blockchain.</p>
+                <h4>Key Requirements:</h4>
+                <ul>
+                    <li>Must use <strong>AlgoKit</strong> as the primary development framework.</li>
+                    <li>Deploy smart contracts strictly to the Algorand Testnet.</li>
+                    <li>Submit a verifiable App ID with your project.</li>
+                    <li>Ensure frontend integration with a compatible wallet.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <section id="rules" class="animate-on-scroll">
+        <div class="rules-box glass-card">
+            <h2 style="font-size: 2.5rem; margin-bottom: 1rem; color: var(--text-main);">Mandatory Submission Rules</h2>
+            <p style="color: var(--danger); font-size: 1.1rem; font-weight: 600;">Failure to comply with ANY of these 4 rules will result in immediate disqualification.</p>
+            
+            <div class="rules-grid">
+                <div class="rule-item">
+                    <h4>🌐 1. Live Deployment</h4>
+                    <p>Your application must be publicly accessible via a live URL (Vercel, AWS, Netlify, etc.). Localhost submissions are not accepted.</p>
+                </div>
+                <div class="rule-item">
+                    <h4>🎥 2. Demo Video</h4>
+                    <p>Submit a 2-5 minute Public LinkedIn Demo Video showcasing the working product. You must tag the official RIFT page.</p>
+                </div>
+                <div class="rule-item">
+                    <h4>💻 3. Public GitHub</h4>
+                    <p>Your code must be in a Public GitHub Repository containing a comprehensive, well-documented <code>README.md</code> detailing setup instructions.</p>
+                </div>
+                <div class="rule-item">
+                    <h4>⏳ 4. Time Window</h4>
+                    <p>Submission links will only open on the RIFT website during the strict window of <strong>Feb 19th, 6:00 PM - 8:00 PM</strong>.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timeline">
+        <div class="section-header animate-on-scroll">
+            <h2>Event <span class="text-gradient">Timeline</span></h2>
+            <p>48 hours of uninterrupted building.</p>
+        </div>
+        
+        <div class="timeline-container">
+            <div class="timeline-item animate-on-scroll">
+                <div class="timeline-date">DAY 1 - FEB 17</div>
+                <div class="timeline-content">
+                    <h3>Opening Ceremony & Hacking Begins</h3>
+                    <p>Kickoff presentation, sponsor API reveals, and team formation. The official timer starts at 6:00 PM.</p>
+                </div>
+            </div>
+            <div class="timeline-item animate-on-scroll">
+                <div class="timeline-date">DAY 2 - FEB 18</div>
+                <div class="timeline-content">
+                    <h3>Mentorship & Midnight Check-in</h3>
+                    <p>Industry experts will circulate to help unblock technical issues. Midnight progress check-in required for all teams.</p>
+                </div>
+            </div>
+            <div class="timeline-item animate-on-scroll">
+                <div class="timeline-date">DAY 3 - FEB 19</div>
+                <div class="timeline-content">
+                    <h3>Code Freeze & Pitches</h3>
+                    <p>Strict code freeze at 6:00 PM. Followed by top 10 team pitches, judging deliberation, and the closing awards ceremony.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="prizes">
+        <div class="section-header animate-on-scroll">
+            <h2>Prizes & <span class="text-gradient">Perks</span></h2>
+        </div>
+        <div class="prizes-grid">
+            <div class="prize-card glass-card tracks animate-on-scroll">
+                <h3 style="color: var(--primary-cyan)">Track Winners</h3>
+                <div class="prize-amount">$2,500</div>
+                <p>Cash prize for the best solution in each of the 4 individual tracks.</p>
+            </div>
+            <div class="prize-card glass-card grand animate-on-scroll">
+                <h3 style="color: #FFD700">Overall Grand Prize</h3>
+                <div class="prize-amount" style="color: #FFD700">$10,000</div>
+                <p>Awarded to the single most innovative and complete project of the hackathon, plus fast-track incubator interviews.</p>
+            </div>
+            <div class="prize-card glass-card perks animate-on-scroll">
+                <h3 style="color: var(--primary-purple)">All Hackers</h3>
+                <div class="prize-amount" style="font-size: 2.5rem; margin: 2rem 0;">Perks</div>
+                <p>$5,000 in AWS Credits, exclusive RIFT 2026 swag, and access to partner APIs.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="faq" class="animate-on-scroll">
+        <div class="section-header">
+            <h2>Frequently Asked Questions</h2>
+        </div>
+        <div class="faq-container">
+            <div class="faq-item">
+                <button class="faq-question">What is the maximum team size? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Teams can consist of 1 to 4 members. You can join with a pre-formed team or find teammates during our Day 1 team-building session.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Who owns the intellectual property (IP)? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>You do. 100% of the IP generated during the hackathon belongs entirely to the team that built it.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">Can I use code I wrote before the hackathon? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>No. All code must be written during the 48-hour hacking window. However, you are permitted to use open-source boilerplates, standard libraries, and frameworks.</p>
+                </div>
+            </div>
+            <div class="faq-item">
+                <button class="faq-question">What are the judging criteria? <span>+</span></button>
+                <div class="faq-answer">
+                    <p>Projects are evaluated on 4 pillars: Technical Depth/Complexity (30%), Innovation & Originality (30%), Real-world Viability (20%), and UI/UX Execution & Demo (20%).</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="footer-cta animate-on-scroll">
+            <h2>Ready to view our submission?</h2>
+            <a href="#" class="btn btn-primary">Launch Project App</a>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2026 RIFT Hackathon Organizing Team. All code submitted must be open source.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Initialize Particles.js
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": ["#00f0ff", "#9d4edd"] },
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.5, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#ffffff", "opacity": 0.1, "width": 1 },
+                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": true, "out_mode": "out" }
+            },
+            "interactivity": {
+                "detect_on": "canvas",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "resize": true },
+                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.3 } } }
+            },
+            "retina_detect": true
+        });
+
+        // Scroll Observer for Fade-in Animations
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Dynamic Countdown Timer
+        // Setting it to strictly hit Feb 19, 2026 at 6:00 PM
+        const targetDate = new Date("Feb 19, 2026 18:00:00").getTime(); 
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown").innerHTML = "<h2 style='color: var(--danger)'>SUBMISSIONS CLOSED</h2>";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days.toString().padStart(2, '0');
+            document.getElementById("hours").innerText = hours.toString().padStart(2, '0');
+            document.getElementById("minutes").innerText = minutes.toString().padStart(2, '0');
+            document.getElementById("seconds").innerText = seconds.toString().padStart(2, '0');
+        }, 1000);
+
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(button => {
+            button.addEventListener('click', () => {
+                const faqItem = button.parentElement;
+                const isActive = faqItem.classList.contains('active');
+                
+                // Close all other items
+                document.querySelectorAll('.faq-item').forEach(item => {
+                    item.classList.remove('active');
+                    item.querySelector('span').innerText = '+';
+                });
+
+                // Toggle current item
+                if (!isActive) {
+                    faqItem.classList.add('active');
+                    button.querySelector('span').innerText = '-';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

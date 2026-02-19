@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Source Code | AML SecureNet</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Space+Grotesk:wght@400;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --neon-blue: #00f0ff;
+            --neon-blue-dark: #0055ff;
+            --neon-green: #00ff66;
+            --neon-red: #ff3366;
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #e2e8f0;
+            --text-muted: #94a3b8;
+            --transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.6;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            background-image: 
+                radial-gradient(circle at 15% 50%, rgba(0, 240, 255, 0.05), transparent 25%),
+                radial-gradient(circle at 85% 30%, rgba(0, 255, 102, 0.05), transparent 25%);
+        }
+
+        a:focus-visible, button:focus-visible, .btn:focus-visible { outline: 2px solid var(--neon-blue); outline-offset: 4px; }
+
+        /* Particles Background */
+        #particles-js { position: fixed; width: 100%; height: 100%; top: 0; left: 0; z-index: -1; pointer-events: none; }
+
+        h1, h2, h3, h4 { font-family: 'Space Grotesk', sans-serif; }
+        .text-gradient { color: var(--neon-blue); }
+        .glass { background: var(--glass-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border: 1px solid var(--glass-border); border-radius: 12px; }
+
+        /* Navbar */
+        nav { position: fixed; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 1rem 5%; z-index: 1000; border-bottom: 1px solid var(--glass-border); background: rgba(10, 10, 15, 0.85); backdrop-filter: blur(16px); }
+        .logo { font-size: 1.5rem; font-weight: 700; font-family: 'Space Grotesk'; text-decoration: none; color: var(--text-main); }
+        .logo span { color: var(--neon-blue); text-shadow: 0 0 10px rgba(0, 240, 255, 0.4); }
+        .nav-links { display: flex; gap: 2rem; list-style: none; }
+        .nav-links a { color: var(--text-main); text-decoration: none; font-size: 0.9rem; transition: var(--transition); }
+        .nav-links a:hover, .nav-links a.active { color: var(--neon-blue); text-shadow: 0 0 8px rgba(0, 240, 255, 0.5); }
+        
+        .menu-toggle { display: none; flex-direction: column; gap: 5px; cursor: pointer; background: none; border: none; padding: 5px; z-index: 1001; }
+        .menu-toggle .bar { width: 25px; height: 3px; background-color: var(--text-main); transition: var(--transition); }
+
+        /* Page Layout */
+        .page-content { flex: 1; padding: 140px 5% 6rem; position: relative; z-index: 2; }
+        .section-header { text-align: center; margin-bottom: 4rem; }
+        .section-header h1 { font-size: 3.5rem; margin-bottom: 1rem; }
+        .section-header p { color: var(--text-muted); max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+        /* Repo Links Section */
+        .repo-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; max-width: 900px; margin: 0 auto 5rem; }
+        .repo-card { padding: 2.5rem; text-align: left; transition: var(--transition); display: flex; flex-direction: column; height: 100%; border-top: 3px solid var(--glass-border); }
+        .repo-card:hover { transform: translateY(-10px); border-top-color: var(--neon-blue); box-shadow: 0 15px 30px rgba(0, 240, 255, 0.1); }
+        .repo-card h3 { font-size: 1.5rem; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px; }
+        .repo-card p { color: var(--text-muted); font-size: 0.95rem; margin-bottom: 2rem; flex-grow: 1; }
+        .repo-link { display: inline-flex; align-items: center; gap: 8px; color: var(--neon-blue); font-weight: 600; text-decoration: none; transition: var(--transition); font-family: 'Space Grotesk'; }
+        .repo-link:hover { text-shadow: 0 0 10px var(--neon-blue); letter-spacing: 1px; }
+
+        /* Code Terminal Showcase */
+        .code-showcase { max-width: 1000px; margin: 0 auto; }
+        .terminal-window { background: #1e1e24; border-radius: 12px; border: 1px solid var(--glass-border); overflow: hidden; box-shadow: 0 25px 50px rgba(0,0,0,0.5), 0 0 30px rgba(0, 240, 255, 0.1); }
+        .terminal-header { background: #2d2d34; padding: 12px 20px; display: flex; align-items: center; border-bottom: 1px solid #3d3d44; }
+        .mac-dots { display: flex; gap: 8px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .dot.red { background: #ff5f56; }
+        .dot.yellow { background: #ffbd2e; }
+        .dot.green { background: #27c93f; }
+        .file-name { color: #8b8b98; font-family: 'Fira Code', monospace; font-size: 0.85rem; margin-left: 20px; }
+        
+        .code-content { padding: 2rem; overflow-x: auto; }
+        pre { margin: 0; font-family: 'Fira Code', monospace; font-size: 0.95rem; line-height: 1.6; color: #a9b7c6; }
+        .keyword { color: #c678dd; }
+        .function { color: #61afef; }
+        .string { color: #98c379; }
+        .comment { color: #5c6370; font-style: italic; }
+        .variable { color: #e06c75; }
+        .operator { color: #56b6c2; }
+
+        /* Footer */
+        footer { border-top: 1px solid var(--glass-border); padding: 3rem 5%; background: rgba(0,0,0,0.6); position: relative; z-index: 2; text-align: center; margin-top: auto; }
+        .footer-bottom { color: var(--text-muted); font-size: 0.9rem; margin-top: 1rem; }
+
+        /* Animations */
+        .animate-on-scroll { opacity: 0; transform: translateY(30px); transition: opacity 0.8s ease, transform 0.8s ease; }
+        .animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .menu-toggle { display: flex; }
+            .nav-links { position: absolute; top: 70px; right: 0; left: 0; background: rgba(18, 18, 20, 0.95); flex-direction: column; align-items: center; padding: 2rem 0; transform: translateY(-150%); transition: transform 0.4s ease; border-bottom: 1px solid var(--glass-border); z-index: 999; }
+            .nav-links.nav-active { transform: translateY(0); }
+            .section-header h1 { font-size: 2.5rem; }
+            pre { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="particles-js"></div>
+
+    <nav>
+        <a href="index.html" class="logo">AML <span>SecureNet</span></a>
+        <button class="menu-toggle" id="mobile-menu" aria-label="Toggle Navigation">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </button>
+        <ul class="nav-links" id="nav-links">
+            <!-- <li><a href="index.html">Home</a></li>
+            <li><a href="index.html#capabilities">Capabilities</a></li>
+            <li><a href="index.html#tech-stack">Tech Stack</a></li>
+            <li><a href="source.html" class="active">Source Code</a></li> -->
+        </ul>
+    </nav>
+
+    <main class="page-content">
+        <div class="section-header animate-on-scroll">
+            <h1>Open <span class="text-gradient">Source</span></h1>
+            <p>Transparency is key in enterprise security. Review our repositories, evaluate our graph algorithms, and see exactly how AML SecureNet processes data.</p>
+        </div>
+
+        <div class="repo-grid">
+            <div class="glass repo-card animate-on-scroll">
+                <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="var(--neon-blue)"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Frontend UI & WASM</h3>
+                <p>Contains the React.js dashboard, glassmorphism UI components, and the WebAssembly modules responsible for client-side CSV parsing.</p>
+                <a href="https://github.com/your-username/frontend-repo" target="_blank" class="repo-link">View on GitHub →</a>
+            </div>
+
+            <div class="glass repo-card animate-on-scroll" style="transition-delay: 0.1s;">
+                <h3><svg width="24" height="24" viewBox="0 0 24 24" fill="var(--neon-green)"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Core Graph Engine</h3>
+                <p>The Python FastAPI backend and Neo4j graph algorithms used to score nodes, detect smurfing, and map cyclical transaction loops.</p>
+                <a href="https://github.com/ShreyanshGupta205/MONEYMULING" target="_blank" class="repo-link" style="color: var(--neon-green)">View on GitHub →</a>
+            </div>
+        </div>
+
+        <div class="code-showcase animate-on-scroll">
+            <h2 style="text-align: center; margin-bottom: 2rem; font-size: 2rem;">Inside The Engine</h2>
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="mac-dots">
+                        <div class="dot red"></div>
+                        <div class="dot yellow"></div>
+                        <div class="dot green"></div>
+                    </div>
+                    <div class="file-name">aml_graph_engine.py</div>
+                </div>
+                <div class="code-content">
+<pre><code><span class="keyword">import</span> networkx <span class="keyword">as</span> nx
+<span class="keyword">from</span> typing <span class="keyword">import</span> List, Dict
+
+<span class="keyword">def</span> <span class="function">detect_muling_cycles</span>(transactions_graph: nx.DiGraph, depth_limit: <span class="operator">int</span> = <span class="variable">5</span>) -> List[Dict]:
+    <span class="comment">"""
+    Scans the directed transaction graph for closed loops (cycles)
+    which indicate circular fund routing often used in money laundering.
+    """</span>
+    suspicious_rings = []
+    
+    <span class="comment"># Find all simple cycles in the directed graph</span>
+    cycles = <span class="operator">list</span>(nx.simple_cycles(transactions_graph))
+    
+    <span class="keyword">for</span> ring <span class="keyword">in</span> cycles:
+        <span class="comment"># Filter out standard 2-node refunds, look for multi-layer loops</span>
+        <span class="keyword">if</span> <span class="variable">2</span> <span class="operator"><</span> <span class="operator">len</span>(ring) <span class="operator"><=</span> depth_limit:
+            
+            risk_score = <span class="function">calculate_ring_velocity</span>(transactions_graph, ring)
+            
+            <span class="keyword">if</span> risk_score <span class="operator">></span> <span class="variable">0.85</span>:
+                suspicious_rings.append({
+                    <span class="string">'nodes'</span>: ring,
+                    <span class="string">'pattern'</span>: <span class="string">'Circular Routing'</span>,
+                    <span class="string">'risk_severity'</span>: <span class="string">'CRITICAL'</span>,
+                    <span class="string">'velocity_score'</span>: risk_score
+                })
+                
+    <span class="keyword">return</span> suspicious_rings</code></pre>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="logo" style="margin-bottom: 0.5rem;">AML <span>SecureNet</span></div>
+        <div class="footer-bottom">
+            &copy; 2026 AML SecureNet. Built during the Hackathon.
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script>
+        // Mobile Menu Toggle
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navLinks = document.getElementById('nav-links');
+        
+        mobileMenu.addEventListener('click', () => { navLinks.classList.toggle('nav-active'); });
+        navLinks.querySelectorAll('a').forEach(link => { link.addEventListener('click', () => { navLinks.classList.remove('nav-active'); }); });
+
+        // Interactive Background (Slightly reduced for performance on secondary page)
+        particlesJS("particles-js", {
+            "particles": {
+                "number": { "value": 70, "density": { "enable": true, "value_area": 800 } },
+                "color": { "value": "#00f0ff" }, 
+                "shape": { "type": "circle" },
+                "opacity": { "value": 0.3, "random": true },
+                "size": { "value": 3, "random": true },
+                "line_linked": { "enable": true, "distance": 150, "color": "#0055ff", "opacity": 0.3, "width": 1.5 },
+                "move": { "enable": true, "speed": 1.5, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+            },
+            "interactivity": {
+                "detect_on": "window",
+                "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                "modes": { "grab": { "distance": 200, "line_linked": { "opacity": 0.8 } }, "push": { "particles_nb": 3 } }
+            },
+            "retina_detect": true
+        });
+
+        // Scroll Observer
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.animate-on-scroll').forEach((el) => { observer.observe(el); });
+    </script>
+</body>
+</html>
